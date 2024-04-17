@@ -7,7 +7,7 @@ This repository contains a Node.js project using Express and Drizzle ORM for a M
 Before you begin, ensure you have met the following requirements:
 
 - **Node.js**: Node.js 12.x or higher must be installed.
-- **MySQL**: MySQL server must be installed and running on your local machine or a remote server.
+- **MySQL (optional)**: If you want to be able to interact with a local MySQL database, make sure you have `mysql` installed on your machine.
 - **pnpm**: This project uses pnpm for package management. Install pnpm via npm with `npm install -g pnpm`.
 
 ## Installation
@@ -27,7 +27,7 @@ cd your-repository-directory
  pnpm install
 ```
 
-1. **Configure the database connection:**
+1. **Configure the database connection (if you want to connect to a local mysql database):**
 
    Update the database configuration settings with your MySQL credentials and database details. Modify the db.js file (or wherever your database configuration is stored):
 
@@ -46,14 +46,18 @@ export default connection;
 
 2. **Initialize the database:**
 
-   Run the MySQL scripts located in the sql/ directory (if provided) to set up your database schema and initial data. You can do this via the MySQL command line:
-   mysql -u yourUsername -p yourDatabaseName < sql/init_db.sql
+   Run the following command to create the database tables:
 
-3. **Start the server:**
+```bash
+pnpm run db:generate
+pnpm run db:push
+```
+
+3. **Start the dev server:**
 4.
 
 ```bash
-pnpm run start
+pnpm run dev
 ```
 
 ## Usage
@@ -74,7 +78,7 @@ curl -X POST http://localhost:3000/companies \
   curl -X GET http://localhost:3000/companies
 ```
 
-### API Endpoints
+### Provided API Endpoints
 
 | Method | Endpoint         | Description                   |
 | ------ | ---------------- | ----------------------------- |
@@ -89,11 +93,3 @@ curl -X POST http://localhost:3000/companies \
 | POST   | /inventories     | Create new inventory.         |
 | GET    | /inventories     | Retrieve all inventories.     |
 | GET    | /inventories/:id | Retrieve an inventory by ID.  |
-
-## Contributing
-
-Contributions to this project are welcome. Please fork the repository and submit a pull request with your features or corrections.
-
-## License
-
-This project is licensed under the MIT License (LICENSE).
