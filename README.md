@@ -8,51 +8,53 @@ Before you begin, ensure you have met the following requirements:
 
 - **Node.js**: Node.js 12.x or higher must be installed.
 - **MySQL**: MySQL server must be installed and running on your local machine or a remote server.
-- **pnpm**: This project uses pnpm for package management. Install pnpm via npm with npm install -g pnpm.
+- **pnpm**: This project uses pnpm for package management. Install pnpm via npm with `npm install -g pnpm`.
 
 ## Installation
 
 Follow these steps to get your development environment set up:
 
 1. **Clone the repository:**
-   ```bash
-   git clone https://your-repository-url.git
-   cd your-repository-directory
-   ```
 
-````
+```bash
+git clone https://your-repository-url.git
+cd your-repository-directory
+```
 
 2. **Install dependencies:**
+
 ```bash
  pnpm install
-````
+```
 
-3. **Configure the database connection:**
+1. **Configure the database connection:**
 
    Update the database configuration settings with your MySQL credentials and database details. Modify the db.js file (or wherever your database configuration is stored):
 
-   ```typescript
-   import mysql from "mysql2/promise";
+```typescript
+import mysql from "mysql2/promise";
 
-   const connection = mysql.createConnection({
-     host: "localhost",
-     user: "yourUsername",
-     password: "yourPassword",
-     database: "yourDatabaseName",
-   });
+const connection = mysql.createConnection({
+  host: "localhost",
+  user: "yourUsername",
+  password: "yourPassword",
+  database: "yourDatabaseName",
+});
 
-   export default connection;
-   ```
+export default connection;
+```
 
-4. **Initialize the database:**
+2. **Initialize the database:**
 
    Run the MySQL scripts located in the sql/ directory (if provided) to set up your database schema and initial data. You can do this via the MySQL command line:
    mysql -u yourUsername -p yourDatabaseName < sql/init_db.sql
 
-5. **Start the server:**
-   ```bash
-   pnpm run start
-   ```
+3. **Start the server:**
+4.
+
+```bash
+pnpm run start
+```
 
 ## Usage
 
@@ -60,11 +62,11 @@ Once the server is running, you can access the API at http://localhost:3000. Her
 
 - **Create a Company:**
 
-  ```bash
-  curl -X POST http://localhost:3000/companies \
-  -H "Content-Type: application/json" \
-  -d '{"name": "Tech Innovations"}'
-  ```
+```bash
+curl -X POST http://localhost:3000/companies \
+-H "Content-Type: application/json" \
+-d '{"name": "Tech Innovations"}'
+```
 
 - **Get All Companies:**
 
