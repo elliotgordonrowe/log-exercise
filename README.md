@@ -15,25 +15,34 @@ Before you begin, ensure you have met the following requirements:
 Follow these steps to get your development environment set up:
 
 1. **Clone the repository:**
+   ```bash
    git clone https://your-repository-url.git
    cd your-repository-directory
+   ```
+
+````
 
 2. **Install dependencies:**
-   pnpm install
+```bash
+ pnpm install
+````
 
 3. **Configure the database connection:**
 
    Update the database configuration settings with your MySQL credentials and database details. Modify the db.js file (or wherever your database configuration is stored):
-   import mysql from 'mysql2/promise';
+
+   ```typescript
+   import mysql from "mysql2/promise";
 
    const connection = mysql.createConnection({
-   host: 'localhost',
-   user: 'yourUsername',
-   password: 'yourPassword',
-   database: 'yourDatabaseName'
+     host: "localhost",
+     user: "yourUsername",
+     password: "yourPassword",
+     database: "yourDatabaseName",
    });
 
    export default connection;
+   ```
 
 4. **Initialize the database:**
 
@@ -41,19 +50,27 @@ Follow these steps to get your development environment set up:
    mysql -u yourUsername -p yourDatabaseName < sql/init_db.sql
 
 5. **Start the server:**
+   ```bash
    pnpm run start
+   ```
 
 ## Usage
 
 Once the server is running, you can access the API at http://localhost:3000. Here are some example curl commands you can use to interact with the API:
 
 - **Create a Company:**
+
+  ```bash
   curl -X POST http://localhost:3000/companies \
   -H "Content-Type: application/json" \
   -d '{"name": "Tech Innovations"}'
+  ```
 
 - **Get All Companies:**
+
+```bash
   curl -X GET http://localhost:3000/companies
+```
 
 ### API Endpoints
 
