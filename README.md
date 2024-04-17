@@ -1,6 +1,28 @@
-# Project Title
+# Technical Assignment: Inventory Log Feature
 
-This repository contains a Node.js project using Express and Drizzle ORM for a MySQL database. It provides a REST API for managing companies, units, and inventories.
+## Overview
+
+This repository serves as the starting point for a technical assessment aimed at evaluating your backend development and TypeScript skills. Your task is to implement a logging feature for inventory activities within the provided system, which includes handling `companies`, `units`, and `inventories`.
+
+## Objective
+
+Develop a comprehensive log system that records all modifications to the inventory items. These activities may include adding, subtracting, or transforming inventory items. The logs should be detailed enough to support a potential feature where the inventory state can be "rewound" back to any specific point in time based on the timestamp of the logs. While the implementation of the rewind feature itself is not required, completing it will be considered a plus.
+
+## Requirements
+
+- **Activity Logging**: Implement a system to log every change made to inventory items. Each log entry should capture sufficient information such as the type of activity (addition, subtraction, transformation), the date and time of the activity, the user responsible, and the before-and-after states of the inventory item.
+- **Data Integrity**: Ensure that logs are immutable once written, to maintain a reliable audit trail.
+- **Scalability**: Design the logging system to efficiently handle a large volume of inventory updates and queries.
+
+## Expectations
+
+- **Flexibility**: You are encouraged to reorganize the existing codebase and architecture as you see fit to best implement the feature.
+- **Code Quality**: Your code should follow best practices regarding readability, scalability, and reusability. Use appropriate design patterns and ensure your code is well-commented.
+- **Documentation**: Update the README.md with instructions on how the logging system works and any setup required to get it running.
+
+## Submission
+
+Upon completion of your assignment, please provide the URL of your forked repository by submitting it via the application process or emailing it to the contact provided in your interview invitation. This will facilitate the review of your code by our engineering team.
 
 ## Prerequisites
 
@@ -17,8 +39,8 @@ Follow these steps to get your development environment set up:
 1. **Clone the repository:**
 
 ```bash
-git clone https://your-repository-url.git
-cd your-repository-directory
+git clone git@github.com:Circularise/log-exercise.git
+cd log-exercise
 ```
 
 2. **Install dependencies:**
