@@ -6,16 +6,15 @@ This repository serves as the starting point for a technical assessment aimed at
 
 ## Objective
 
-Develop a comprehensive log system that records all modifications to the inventory items. These modifications are expected to be triggered through various unimplemented `/inventories` endpoints such as `/inventories/book`, `/inventories/process`, `/inventories/send`, etc. The logs should be detailed enough to support a potential feature where the inventory state can be "rewound" back to any specific point in time based on the timestamp of the logs. While the implementation of the rewind feature itself is not required, completing it will be considered a plus.
+Develop a comprehensive log system that records all modifications to the inventory items. These modifications are expected to be triggered through various unimplemented `/inventories` endpoints such as `/book`, `/process`, `/send`, etc. The logs should be detailed enough to support a potential feature where the inventory state can be "rewound" back to any specific point in time based on the timestamp of the logs. While the implementation of the rewind feature itself is not required, completing it will be considered a plus.
 
 ## Requirements
 
-Implement a system to log every change made to inventory items via the specified endpoints (`/book`, `/process`, `/send`). Each log entry should capture sufficient information such as the type of activity (booking, processing, sending), the date and time of the activity, the user responsible, and the before-and-after states of the inventory item.
+Implement a system to log every change made to inventory items via (uninemplemented) endpoints (e.g. `/book`, `/process`, `/send`). Each log entry should capture sufficient information such as the type of activity, the date and time of the activity, the user responsible, and the before-and-after states of the inventory item(s). The inventory operations may be extended and modified in the future, so the log system need to be flexible enough to handle that. 
 
 ## Expectations
 
-- **Endpoint Implementation**: You are expected to implement the necessary endpoints (`/book`, `/process`, `/send`) that will handle the modifications to the inventories. These endpoints will trigger the logging of activities as described.
-
+- **Log Implementation**: You are expected to implement the database schema(s) that will handle the log feature, as well as the business logic to create and manage logs for inventory operations. Optionally, if you have time, you may implement the logic of rewinding logs to a get the inventory back to its state at a specific timestmap. 
 - **Flexibility**: You are encouraged to reorganize the existing codebase and architecture as you see fit to best implement the feature.
 - **Code Quality**: Your code should follow best practices regarding readability, scalability, and reusability. Use appropriate design patterns and ensure your code is well-commented. The provided codebase shouldn't be considered as a reference for best practices.
 - **Documentation**: Update the README.md with instructions on how the logging system works if necessary.
@@ -29,7 +28,7 @@ Upon completion of your assignment, please provide the URL of your forked reposi
 Before you begin, ensure you have met the following requirements:
 
 - **Node.js**: Node.js 12.x or higher must be installed.
-- **MySQL (optional)**: If you want to be able to interact with a local MySQL database, make sure you have `mysql` installed on your machine.
+- **MySQL (optional)**: If you want to be able to interact with a local MySQL database, make sure you have `mysql` installed on your machine, create a new database and configure the appropriate credentials in `/db/db.ts`.
 - **pnpm**: This project uses pnpm for package management. Install pnpm via npm with `npm install -g pnpm`.
 
 ## Installation
@@ -51,19 +50,15 @@ cd log-exercise
 
 1. **Configure the database connection (if you want to connect to a local mysql database):**
 
-   Update the database configuration settings with your MySQL credentials and database details. Modify the db.js file (or wherever your database configuration is stored):
+   Update the database configuration settings with your MySQL credentials and database details. Modify the `/db/db.ts` file:
 
 ```typescript
-import mysql from "mysql2/promise";
-
 const connection = mysql.createConnection({
   host: "localhost",
   user: "yourUsername",
   password: "yourPassword",
   database: "yourDatabaseName",
 });
-
-export default connection;
 ```
 
 2. **Initialize the database:**
