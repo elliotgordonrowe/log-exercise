@@ -6,19 +6,21 @@ This repository serves as the starting point for a technical assessment aimed at
 
 ## Objective
 
-Develop a comprehensive log system that records all modifications to the inventory items. These activities may include adding, subtracting, or transforming inventory items. The logs should be detailed enough to support a potential feature where the inventory state can be "rewound" back to any specific point in time based on the timestamp of the logs. While the implementation of the rewind feature itself is not required, completing it will be considered a plus.
+Develop a comprehensive log system that records all modifications to the inventory items. These modifications are expected to be triggered through various unimplemented endpoints such as `/book`, `/process`, `/send`, etc. The logs should be detailed enough to support a potential feature where the inventory state can be "rewound" back to any specific point in time based on the timestamp of the logs. While the implementation of the rewind feature itself is not required, completing it will be considered a plus.
 
 ## Requirements
 
-- **Activity Logging**: Implement a system to log every change made to inventory items. Each log entry should capture sufficient information such as the type of activity (addition, subtraction, transformation), the date and time of the activity, the user responsible, and the before-and-after states of the inventory item.
+- **Activity Logging**: Implement a system to log every change made to inventory items via the specified endpoints (`/book`, `/process`, `/send`). Each log entry should capture sufficient information such as the type of activity (booking, processing, sending), the date and time of the activity, the user responsible, and the before-and-after states of the inventory item.
 - **Data Integrity**: Ensure that logs are immutable once written, to maintain a reliable audit trail.
 - **Scalability**: Design the logging system to efficiently handle a large volume of inventory updates and queries.
 
 ## Expectations
 
+- **Endpoint Implementation**: You are expected to implement the necessary endpoints (`/book`, `/process`, `/send`) that will handle the modifications to the inventories. These endpoints will trigger the logging of activities as described.
+
 - **Flexibility**: You are encouraged to reorganize the existing codebase and architecture as you see fit to best implement the feature.
 - **Code Quality**: Your code should follow best practices regarding readability, scalability, and reusability. Use appropriate design patterns and ensure your code is well-commented.
-- **Documentation**: Update the README.md with instructions on how the logging system works and any setup required to get it running.
+- **Documentation**: Update the README.md with instructions on how the logging system works, any setup required to get it running, and a detailed description of each endpoint's functionality.
 
 ## Submission
 
