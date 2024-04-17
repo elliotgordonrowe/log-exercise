@@ -2,29 +2,27 @@
 
 ## Overview
 
-This repository serves as the starting point for a technical assessment aimed at evaluating your backend development and TypeScript skills. Your task is to implement a logging feature for inventory activities within the provided system, which includes handling `companies`, `units`, and `inventories`.
+This repository serves as the starting point for a technical assessment aimed at evaluating your backend development and TypeScript skills. Your task is to implement a logging feature for inventory activities within the provided system.
 
 ## Objective
 
-Develop a comprehensive log system that records all modifications to the inventory items. These modifications are expected to be triggered through various unimplemented endpoints such as `/book`, `/process`, `/send`, etc. The logs should be detailed enough to support a potential feature where the inventory state can be "rewound" back to any specific point in time based on the timestamp of the logs. While the implementation of the rewind feature itself is not required, completing it will be considered a plus.
+Develop a comprehensive log system that records all modifications to the inventory items. These modifications are expected to be triggered through various unimplemented `/inventories` endpoints such as `/inventories/book`, `/inventories/process`, `/inventories/send`, etc. The logs should be detailed enough to support a potential feature where the inventory state can be "rewound" back to any specific point in time based on the timestamp of the logs. While the implementation of the rewind feature itself is not required, completing it will be considered a plus.
 
 ## Requirements
 
-- **Activity Logging**: Implement a system to log every change made to inventory items via the specified endpoints (`/book`, `/process`, `/send`). Each log entry should capture sufficient information such as the type of activity (booking, processing, sending), the date and time of the activity, the user responsible, and the before-and-after states of the inventory item.
-- **Data Integrity**: Ensure that logs are immutable once written, to maintain a reliable audit trail.
-- **Scalability**: Design the logging system to efficiently handle a large volume of inventory updates and queries.
+Implement a system to log every change made to inventory items via the specified endpoints (`/book`, `/process`, `/send`). Each log entry should capture sufficient information such as the type of activity (booking, processing, sending), the date and time of the activity, the user responsible, and the before-and-after states of the inventory item.
 
 ## Expectations
 
 - **Endpoint Implementation**: You are expected to implement the necessary endpoints (`/book`, `/process`, `/send`) that will handle the modifications to the inventories. These endpoints will trigger the logging of activities as described.
 
 - **Flexibility**: You are encouraged to reorganize the existing codebase and architecture as you see fit to best implement the feature.
-- **Code Quality**: Your code should follow best practices regarding readability, scalability, and reusability. Use appropriate design patterns and ensure your code is well-commented.
-- **Documentation**: Update the README.md with instructions on how the logging system works, any setup required to get it running, and a detailed description of each endpoint's functionality.
+- **Code Quality**: Your code should follow best practices regarding readability, scalability, and reusability. Use appropriate design patterns and ensure your code is well-commented. The provided codebase shouldn't be considered as a reference for best practices.
+- **Documentation**: Update the README.md with instructions on how the logging system works if necessary.
 
 ## Submission
 
-Upon completion of your assignment, please provide the URL of your forked repository by submitting it via the application process or emailing it to the contact provided in your interview invitation. This will facilitate the review of your code by our engineering team.
+Upon completion of your assignment, please provide the URL of your forked repository by emailing it to the contact provided.
 
 ## Prerequisites
 
@@ -88,7 +86,7 @@ pnpm run dev
 
 Once the server is running, you can access the API at http://localhost:3000. Here are some example curl commands you can use to interact with the API:
 
-- **Create a Company:**
+- **Example: Create a Company:**
 
 ```bash
 curl -X POST http://localhost:3000/companies \
@@ -96,13 +94,15 @@ curl -X POST http://localhost:3000/companies \
 -d '{"name": "Tech Innovations"}'
 ```
 
-- **Get All Companies:**
+- **Example: Get All Companies:**
 
 ```bash
   curl -X GET http://localhost:3000/companies
 ```
 
 ### Provided API Endpoints
+
+Those are provided as a starter and to help populate the database if needed.
 
 | Method | Endpoint         | Description                   |
 | ------ | ---------------- | ----------------------------- |
