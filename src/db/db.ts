@@ -4,9 +4,9 @@ import * as schema from "./schema";
 
 export const dbCredentials = {
   host: "localhost",
-  user: "myuser",
-  database: "drizzlenode",
-  password: "password",
+  user: "elliotrowe",
+  database: "logs",
+  password: "test123",
 };
 
 const dbPromise = (async () => {

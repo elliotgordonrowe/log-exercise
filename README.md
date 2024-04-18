@@ -112,3 +112,21 @@ Those are provided as a starter and to help populate the database if needed.
 | POST   | /inventories     | Create new inventory.         |
 | GET    | /inventories     | Retrieve all inventories.     |
 | GET    | /inventories/:id | Retrieve an inventory by ID.  |
+
+
+## Design
+Store each record change to an Audit table for each table that we want to keep an audit trail of. The Audit table has the following structure:
+
+| Timestamp          | ID           | Action                                       | NewValue                        | Author                                                  |
+| UTC Time of change | ID of record | Action taken on the record (add/edit/delete) | Stringified new value of record | Author of change (user taken from authentication token) |
+
+The new value of the record can be returned by the DB upon successful record modification. This result can then be stringified and stored in the NewValue column. For rewinding, we simply:
+
+SELECT * 
+FROM InventoryAudit 
+WHERE Timestamp > SOME_TIMESTAMP 
+ORDER BY DESC;
+
+We then play the changes in reverse, modifying the records in-memory until we playback the first change at which point we commit the result (update the DB) via either bulk edit (preferable) or singular edits to the table.
+
+Apparently drizzle with MySQL does not support returning the last inserted record when the ID is not auto-incremented (i.e. when it is a string). This seems like it should be basic functionality but I do not have the time to investigate an alternative design.

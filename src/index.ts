@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 import { dbPromise } from "./db/db";
-import { companies, units, inventories } from "./db/schema";
-import { eq } from "drizzle-orm";
+import { companies, units, inventories, inventoryAudit } from "./db/schema";
+import { and, eq, gte } from "drizzle-orm";
+import { MySqlTableWithColumns } from "drizzle-orm/mysql-core";
 
 const app = express();
 const PORT = 3000;
@@ -114,6 +115,16 @@ const main = async () => {
       const newInventory = await db
         .insert(inventories)
         .values({ quantity, unitId, productTypeId });
+      const log = {
+        id: newInventory[0].insertId.toString(),  // Unfortunately, this does not work with a string ID field
+        action: Action.Create,
+        body: {
+          quantity,
+          unitId,
+          productTypeId
+        }
+      };
+      await logData(log);
       res.status(201).json(newInventory);
     } catch (error) {
       const errorMessage = handleError(error);
@@ -149,9 +160,89 @@ const main = async () => {
     }
   });
 
+  app.get("/logs", async (req: Request, res: Response) => {
+    try {
+      const date = new Date(req.query.startDate?.toString() ?? '0');
+      const logs = await db
+        .select()
+        .from(inventoryAudit)
+        .where(gte(inventoryAudit.timestamp, date));
+      if (logs.length > 0) {
+        res.status(200).json(logs);
+      } else {
+        res.status(404).json({ message: "Logs not found" });
+      }
+    } catch (error) {
+      const errorMessage = handleError(error);
+      res.status(500).json(errorMessage);
+    }
+  });
+  
+  app.get("/logs/:userId", async (req: Request, res: Response) => {
+    try {
+      const date = new Date(req.query.startDate?.toString() ?? '0');
+      const logs = await db
+        .select()
+        .from(inventoryAudit)
+        .where(
+          and(
+            gte(inventoryAudit.timestamp, date),
+            eq(inventoryAudit.author, req.params.id)
+          )
+        );
+      if (logs.length > 0) {
+        res.status(200).json(logs);
+      } else {
+        res.status(404).json({ message: "Logs not found" });
+      }
+    } catch (error) {
+      const errorMessage = handleError(error);
+      res.status(500).json(errorMessage);
+    }
+  });
+
+  app.put("/inventories/rewind", async (req: Request, res: Response) => {
+    try {
+      const date = new Date(req.query.startDate?.toString() ?? '0');
+      const logs = await db
+        .select()
+        .from(inventoryAudit)
+        .where(gte(inventoryAudit.timestamp, date));
+      
+    } catch (error) {
+      const errorMessage = handleError(error);
+      res.status(500).json(errorMessage);
+    }
+  });
+  
   app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
   });
+
+  
+  async function logData(logValues: Log, table: MySqlTableWithColumns<any> = inventoryAudit): Promise<void> {
+    const newValue = JSON.stringify(logValues.body);
+    const newLog = {
+      id: logValues.id,
+      action: logValues.action,
+      newValue,
+      author: logValues.author ?? 'myUser'
+    }
+    await db.insert(table).values(newLog);
+  }
 };
 
 main();
+
+export interface Log {
+  id: string,
+  action: Action,
+  body: any,
+  author?: string
+}
+
+export enum Action {
+  Create,
+  Update,
+  Delete
+}

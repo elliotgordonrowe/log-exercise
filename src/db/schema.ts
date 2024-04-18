@@ -77,3 +77,19 @@ export const inventoriesRelations = relations(inventories, ({ one }) => ({
     references: [units.id],
   }),
 }));
+
+export const inventoryAudit = mysqlTable("inventoryAudit", {
+  timestamp: timestamp("timestamp")
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  id: varchar("id", { length: 128 }).notNull(),
+  action: varchar("action", { length: 10 }).notNull(),
+  newValue: varchar("newValue", { length: 5000 }).notNull(),
+  author: varchar("author", { length: 36 }).notNull()
+});
+
+export type InventoryAudit = typeof inventoryAudit.$inferSelect;
+
+// export const inventoryAuditRelations = relations(inventoryAudit, ({one, many}) => ({
+//   inventories
+// }))
