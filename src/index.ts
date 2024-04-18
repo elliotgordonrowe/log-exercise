@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import { dbPromise } from "./db/db";
 import { companies, units, inventories, inventoryAudit } from "./db/schema";
-import { and, eq, gte } from "drizzle-orm";
+import { and, desc, eq, gte } from "drizzle-orm";
 import { MySqlTableWithColumns } from "drizzle-orm/mysql-core";
 
 const app = express();
@@ -162,6 +162,7 @@ const main = async () => {
 
   app.get("/logs", async (req: Request, res: Response) => {
     try {
+      // Default to all logs if no start date was passed in
       const date = new Date(req.query.startDate?.toString() ?? '0');
       const logs = await db
         .select()
@@ -180,6 +181,7 @@ const main = async () => {
   
   app.get("/logs/:userId", async (req: Request, res: Response) => {
     try {
+      // Default to all logs if no start date was passed in
       const date = new Date(req.query.startDate?.toString() ?? '0');
       const logs = await db
         .select()
@@ -203,12 +205,35 @@ const main = async () => {
 
   app.put("/inventories/rewind", async (req: Request, res: Response) => {
     try {
+      const hash: {[id: string]: Log} = {};
       const date = new Date(req.query.startDate?.toString() ?? '0');
+      // Get all logs in descending order
       const logs = await db
         .select()
         .from(inventoryAudit)
-        .where(gte(inventoryAudit.timestamp, date));
+        .where(gte(inventoryAudit.timestamp, date))
+        .orderBy(desc(inventoryAudit.timestamp));
       
+      // Return early if there's nothing to do
+      if (logs.length === 0) {
+        res.status(400);
+        return;
+      }
+
+      // Create the hash to store values to which the records will ultimately be updated to
+      for (let i = 0; i < logs.length; i++) {
+        hash[logs[i].id] = JSON.parse(logs[i].newValue);
+      }
+
+      // Drizzle apparently does not support batch calls for MySQL
+      for (let recordId in hash) {
+        // Is this all or nothing? Should we keep going if one update fails?
+        await db
+          .update(inventories)
+          .set(hash[recordId])
+          .where(eq(inventories.id, recordId));
+      }
+      res.status(200);
     } catch (error) {
       const errorMessage = handleError(error);
       res.status(500).json(errorMessage);

@@ -129,4 +129,4 @@ ORDER BY DESC;
 
 We then play the changes in reverse, modifying the records in-memory until we playback the first change at which point we commit the result (update the DB) via either bulk edit (preferable) or singular edits to the table.
 
-Apparently drizzle with MySQL does not support returning the last inserted record when the ID is not auto-incremented (i.e. when it is a string). This seems like it should be basic functionality but I do not have the time to investigate an alternative design.
+Apparently drizzle with MySQL does not support returning the last inserted record when the ID is not auto-incremented (i.e. when it is a string). This seems like it should be basic functionality but I do not have the time to investigate an alternative design. Additionally, Drizzle does not support batch calls for MySQL.
