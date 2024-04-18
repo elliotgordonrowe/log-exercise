@@ -118,7 +118,7 @@ const main = async () => {
       const log = {
         id: newInventory[0].insertId.toString(),  // Unfortunately, this does not work with a string ID field
         action: Action.Create,
-        body: {
+        newValue: {
           quantity,
           unitId,
           productTypeId
@@ -222,16 +222,27 @@ const main = async () => {
 
       // Create the hash to store values to which the records will ultimately be updated to
       for (let i = 0; i < logs.length; i++) {
-        hash[logs[i].id] = JSON.parse(logs[i].newValue);
+        if (hash[logs[i].id]) {
+          hash[logs[i].id].newValue = logs[i].newValue;
+        }
       }
 
       // Drizzle apparently does not support batch calls for MySQL
       for (let recordId in hash) {
         // Is this all or nothing? Should we keep going if one update fails?
-        await db
-          .update(inventories)
-          .set(hash[recordId])
-          .where(eq(inventories.id, recordId));
+        if (hash[recordId].action === Action.Create) {
+          // Delete if the last performed action was a create
+          await db.delete(inventories).where(eq(inventories.id, recordId));
+        } else {
+          // Assume record was deleted and if it was not, update the values
+          const values = JSON.parse(hash[recordId].newValue)
+          await db
+            .insert(inventories)
+            .values({id: recordId, ...values})
+            .onDuplicateKeyUpdate({
+              set: {...values}
+            });
+        }
       }
       res.status(200);
     } catch (error) {
@@ -246,7 +257,7 @@ const main = async () => {
 
   
   async function logData(logValues: Log, table: MySqlTableWithColumns<any> = inventoryAudit): Promise<void> {
-    const newValue = JSON.stringify(logValues.body);
+    const newValue = JSON.stringify(logValues.newValue);
     const newLog = {
       id: logValues.id,
       action: logValues.action,
@@ -262,7 +273,7 @@ main();
 export interface Log {
   id: string,
   action: Action,
-  body: any,
+  newValue: any,
   author?: string
 }
 

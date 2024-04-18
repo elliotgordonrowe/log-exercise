@@ -120,7 +120,7 @@ Store each record change to an Audit table for each table that we want to keep a
 | Timestamp          | ID           | Action                                       | NewValue                        | Author                                                  |
 | UTC Time of change | ID of record | Action taken on the record (add/edit/delete) | Stringified new value of record | Author of change (user taken from authentication token) |
 
-The new value of the record can be returned by the DB upon successful record modification. This result can then be stringified and stored in the NewValue column. For rewinding, we simply:
+The new value of the record can be returned by the DB upon successful record modification. This result can then be stringified and stored in the NewValue column. This allows for the log function to be easily extended by consumers to save whatever state is needed. The function is written to be able to log to multiple different audit tables. For rewinding, we simply:
 
 SELECT * 
 FROM InventoryAudit 
